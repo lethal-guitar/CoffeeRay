@@ -71,10 +71,11 @@ class Raytracer
         _.foldl @traceables, findFunc, null
         
     determineHitColor: (closestHit) ->
-        ray = closestHit.ray
-        normal = closestHit.normal()
         irradiance = new Irradiance(closestHit.material())
-                        
+        @calculateLighting closestHit, irradiance 
+        irradiance.toColor()
+        
+    calculateLighting: (closestHit, irradiance) ->
         for light in @lights
             do (light) =>
                 shadowTestRay = new Ray(closestHit.position, light.position)
@@ -83,8 +84,6 @@ class Raytracer
                 #inShadow = _.any(@traceables, (each) -> (each.testIntersection shadowTestRay)?)
                 
                 unless inShadow
-                    viewVector = ray.direction.multiplyScalar(-1.0)
+                    viewVector = closestHit.ray.direction.multiplyScalar(-1.0)
                     lightVector = shadowTestRay.direction
-                    irradiance.contributeLight viewVector, lightVector, normal, light
-        
-        irradiance.toColor()        
+                    irradiance.contributeLight viewVector, lightVector, closestHit.normal(), light
