@@ -63,21 +63,12 @@ class Raytracer
         new Ray(@viewPoint, pointOnViewplane)
         
     findIntersection: (ray) ->
-        # the cool version, which is unfortunately much much slower..:
-        #intersections = _.filter(_.map(@traceables, (each) -> each.testIntersection ray), (each) -> each?)
-        #_.min(intersections, (each) -> each.distance)
-        
-        closestHit = null
-        closestDistance = Infinity
-        
-        for object in @traceables
-            do (object) ->
-                test = object.testIntersection ray
-                if test? and test.distance < closestDistance
-                    closestHit = test
-                    closestDistance = test.distance
-                    
-        closestHit
+        findFunc = (left, right) -> 
+            test = right.testIntersection ray
+            return test if test?.distance < (left?.distance ? Infinity)
+            left
+            
+        _.foldl @traceables, findFunc, null
         
     makeReflectVector: (normal, vector) ->
         nDot = normal.dotProduct vector
