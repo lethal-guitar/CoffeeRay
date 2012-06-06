@@ -63,10 +63,10 @@ class Raytracer
         new Ray(@viewPoint, pointOnViewplane)
         
     findIntersection: (ray) ->
-        findFunc = (left, right) -> 
-            test = right.testIntersection ray
-            return test if test?.distance < (left?.distance ? Infinity)
-            left
+        findFunc = (current, next) -> 
+            test = next.testIntersection ray
+            return test if test?.distance < (current?.distance ? Infinity)
+            current
             
         _.foldl @traceables, findFunc, null
         
