@@ -12,3 +12,15 @@ performance I can squeeze out of it ;)
 
 Generated images are blitted onto a 2D canvas. Currently it supports only spheres, phong shading and hard shadows. 
 No reflections/refractions (yet), no anti-aliasing, and no fancy stuff like depth-of-field etc.
+
+Building
+--------
+
+I'm using my own python based "build tool" at the moment. `build-order.txt` contains a list of all CoffeeScript source files. 
+Running `build.py` invokes the `coffee` command on all files specified there, and produces a single `web/coffee-ray.js` file.
+So new source files should be added to `build-order.txt`.
+
+Running
+-------
+
+Run the build script (as described above) and open web/coffee-ray.html in your browser of choice.

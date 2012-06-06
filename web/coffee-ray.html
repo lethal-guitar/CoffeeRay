@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+    <head>
+        <title>CoffeeRay - a HTML5 Raytracer</title>
+        <link href="coffee-ray.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="jquery.min.js"></script>
+        <script type="text/javascript" src="underscore-min.js"></script>
+        <script type="text/javascript" src="coffee-ray.js"></script>   
+    </head>
+    <body>
+        <div id="status">
+            <div id="renderInProgress">
+                Raytracing in progress...
+            </div>
+            <div id="renderFinished" style="display: none">
+                Raytracing took: <span id="msDisplay"></span> ms.
+            </div>    
+        </div>
+        <div id="main">
+            <canvas id="screen" width="200" height="150">
+            </canvas>
+        </div>
+        <div id="controls">
+            <h1>Move the red sphere around by changing these values!</h1>
+            <div>
+                <label for="sX">X</label>
+                <input type="text" id="sX"/>
+            </div>
+            <div>
+                <label for="sX">Y</label>
+                <input type="text" id="sY"/>
+            </div>
+            <div>
+                <label for="sX">Z</label>
+                <input type="text" id="sZ"/>
+            </div>
+            <div>
+                <label for="sX">Radius</label>
+                <input type="text" id="sRadius"/>
+            </div>
+            <input type="button" value="Render!" id="traceBtn"/>
+        </div>
+    </body>
+</html>

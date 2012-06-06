@@ -1,0 +1,38 @@
+canvas {
+    border: 1px solid black;
+    box-shadow: 2px 2px 2px #bbb;
+}
+
+#controls {
+    display: block;
+    width: 400px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+#controls h1 {
+    font-size: 1em;
+    font-weight: normal;
+}
+
+#controls label {
+    display: block;
+    float: left;
+    width: 4.2em;
+}
+
+#controls div input {
+    width: 48px;
+    display: block;
+}
+
+#controls div {
+    clear: left;
+    display: block;
+    overflow: hidden;
+    width: 130px;
+}
+
+#traceBtn {
+    width: 100px;
+ }
