@@ -1,8 +1,8 @@
 class Raytracer
-    constructor: (@canvas, @backgroundColor) ->
-        @context = canvas.getContext("2d")
-        @setupImagePlane()            
-        @setupViewport()
+    constructor: (@canvas, @backgroundColor, @viewport) ->
+        @context = @canvas.getContext("2d")
+        @viewport ?= Viewport.defaultViewport(@canvas.width, @canvas.height)
+        @setupImagePlane()
         @traceables = []
         @lights = []
     
@@ -19,20 +19,6 @@ class Raytracer
             @data[index+2] = color.b
             @data[index+3] = color.a
         
-    setupViewport: ->
-        # TODO: Make these customizable - factor out
-        # into a Viewport/Camera class??
-        @xLeft = -12.0
-        @xRight = 12.0
-        @yTop = -9.0
-        @yBottom = 9.0
-        @viewPoint = new Point3D(0.0, 0.0, -10.0)        
-        
-        dx = Math.abs(@xRight - @xLeft)
-        dy = Math.abs(@yTop - @yBottom)
-        @dxPixel = dx / @canvas.width
-        @dyPixel = dy / @canvas.height
-        
     addTraceable: (object) -> 
         @traceables.push object
     
@@ -48,7 +34,7 @@ class Raytracer
         @imageData.setPixel(x, y, color)
         
     determineColorAt: (x, y) ->
-        ray = @constructPrimaryRay(x, y) 
+        ray = @viewport.constructRayForPixel(x, y) 
         closestHit = @findIntersection(ray)
         
         if closestHit? 
@@ -56,12 +42,6 @@ class Raytracer
         else
             @backgroundColor
     
-    constructPrimaryRay: (x, y) ->
-        tx = @xLeft + x * @dxPixel
-        ty = @yTop + y * @dyPixel
-        pointOnViewplane = new Point3D(tx, ty, 0.0)
-        new Ray(@viewPoint, pointOnViewplane)
-        
     findIntersection: (ray) ->
         findFunc = (current, next) -> 
             test = next.testIntersection ray

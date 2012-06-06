@@ -8,6 +8,7 @@ intersection.coffee
 pointlight.coffee
 raytraceable.coffee
 sphere.coffee
+viewport.coffee
 raytracer.coffee
 coffeeray.coffee
 main.coffee
