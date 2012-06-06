@@ -81,8 +81,8 @@ class Raytracer
 
         ambient = new Color(0.0)
         diffuse = new Color(0.0)
-        specular = new Color(0.0)        
-        
+        specular = new Color(0.0)
+                
         for light in @lights
             do (light) =>
                 shadowTestRay = new Ray(closestHit.position, light.position)
