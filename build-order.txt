@@ -3,6 +3,7 @@ point3d.coffee
 color.coffee
 material.coffee
 ray.coffee
+irradiance.coffee
 intersection.coffee
 pointlight.coffee
 raytraceable.coffee

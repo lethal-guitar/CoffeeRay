@@ -70,19 +70,11 @@ class Raytracer
             
         _.foldl @traceables, findFunc, null
         
-    makeReflectVector: (normal, vector) ->
-        nDot = normal.dotProduct vector
-        normal.multiplyScalar(2.0 * nDot).subtract(vector).normalize()
-        
     determineHitColor: (closestHit) ->
         ray = closestHit.ray
         normal = closestHit.normal()
-        material = closestHit.material()
-
-        ambient = new Color(0.0)
-        diffuse = new Color(0.0)
-        specular = new Color(0.0)
-                
+        irradiance = new Irradiance(closestHit.material())
+                        
         for light in @lights
             do (light) =>
                 shadowTestRay = new Ray(closestHit.position, light.position)
@@ -91,31 +83,8 @@ class Raytracer
                 #inShadow = _.any(@traceables, (each) -> (each.testIntersection shadowTestRay)?)
                 
                 unless inShadow
-                    vectorIncoming = ray.direction.multiplyScalar(-1.0)
-                    lightSourceVector = shadowTestRay.direction        
-                    lightReflectVector = @makeReflectVector normal, lightSourceVector
-                    
-                    # Phong lighting!!
-                    diffuseComponent = lightSourceVector.dotProduct normal
-                    
-                    if diffuseComponent > 0.0
-                        addedDiffuse = light.diffuse.multiplyFactor diffuseComponent
-                        diffuse = diffuse.add addedDiffuse
-                    
-                        specularDot = lightReflectVector.dotProduct vectorIncoming
-                        
-                        if specularDot > 0.0
-                            specularComponent = Math.pow specularDot, material.specularity
-                            addedSpecular = light.specular.multiplyFactor specularComponent
-                            specular = specular.add addedSpecular
-            
-        # TODO: Provide global ambient color setting
-        #ambient = material.ambient.multiplyFactor(...)
+                    viewVector = ray.direction.multiplyScalar(-1.0)
+                    lightVector = shadowTestRay.direction
+                    irradiance.contributeLight viewVector, lightVector, normal, light
         
-        @irradianceToColor material, ambient, diffuse, specular
-        
-    irradianceToColor: (material, ambient, diffuse, specular) ->
-        ambientOut = material.ambient.multiply ambient
-        diffuseOut = material.diffuse.multiply diffuse
-        specularOut = material.specular.multiply specular
-        ambientOut.add(diffuseOut).add(specularOut).toRgbColor()
+        irradiance.toColor()        
