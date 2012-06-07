@@ -20,7 +20,7 @@ class CoffeeRay
         
     setupUI: ->
         $('#traceBtn').click =>
-            @moveSphere
+            @moveSphere()
             @render()
                 
         $('#sX').val @theSphere.center.x
