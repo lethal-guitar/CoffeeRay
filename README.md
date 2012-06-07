@@ -4,6 +4,9 @@ CoffeeRay
 A HTML 5 based raytracer written in CoffeeScript. It's a little project done mainly for fun and learning CoffeeScript, 
 and to play around with a raytracing implementation. 
 
+The project
+-----------
+
 I'm currently working on a CUDA-based raytracer for a course at my university. Using a scripting language 
 is perfect for experimentation and exploring the general concepts, in preparation for the "real" implementation. 
 Also, HTML 5 provides a very convenient environment for displaying rendered images and manipulating input parameters.
@@ -17,8 +20,10 @@ Building
 --------
 
 I'm using my own python based "build tool" at the moment. `build-order.txt` contains a list of all CoffeeScript source files. 
+Dependencies are reflected by the order of entries in that file. E.g., `point3d.coffee` is listed before `ray.coffee`, because 
+the `Ray` class depends on the `Point3D` class.
 Running `build.py` invokes the `coffee` command on all files specified there, and produces a single `web/coffee-ray.js` file.
-So new source files should be added to `build-order.txt`.
+So new source files should be added to `build-order.txt`. 
 
 Running
 -------
