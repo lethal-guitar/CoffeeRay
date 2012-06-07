@@ -1,24 +1,9 @@
 class Raytracer
-    constructor: (@canvas, @backgroundColor, @viewport) ->
-        @context = @canvas.getContext("2d")
-        @viewport ?= Viewport.defaultViewport(@canvas.width, @canvas.height)
-        @setupImagePlane()
+    constructor: (@target, @backgroundColor, @viewport) ->
+        @viewport ?= Viewport.defaultViewport(@target.width, @target.height)
         @traceables = []
         @lights = []
     
-    setupImagePlane: ->
-        @imageData = @context.createImageData(@canvas.width, @canvas.height)
-        
-        # patch setPixel function into ImageData - it's not
-        # provided out of the box
-        @imageData.constructor::setPixel = (x, y, color) ->
-            index = x + y*@width
-            index *= 4
-            @data[index]   = color.r
-            @data[index+1] = color.g
-            @data[index+2] = color.b
-            @data[index+3] = color.a
-        
     addTraceable: (object) -> 
         @traceables.push object
     
@@ -26,12 +11,11 @@ class Raytracer
         @lights.push light
     
     render: ->
-        @processPixel(x, y) for x in [0..@canvas.width] for y in [0..@canvas.height]
-        @context.putImageData(@imageData, 0, 0)
+        @processPixel(x, y) for x in [0..@target.width] for y in [0..@target.height]
+        @target.finishedRendering()
     
     processPixel: (x, y) ->
-        color = @determineColorAt(x, y)
-        @imageData.setPixel(x, y, color)
+        @target.setPixel(x, y, @determineColorAt(x, y))
         
     determineColorAt: (x, y) ->
         ray = @viewport.constructRayForPixel(x, y) 

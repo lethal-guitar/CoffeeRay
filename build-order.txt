@@ -9,6 +9,7 @@ pointlight.coffee
 raytraceable.coffee
 sphere.coffee
 viewport.coffee
+rendertarget.coffee
 raytracer.coffee
 coffeeray.coffee
 main.coffee
