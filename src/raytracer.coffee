@@ -33,11 +33,7 @@ class Raytracer
             current
             
         _.foldl @traceables, findFunc, null
-        
-    hasIntersection: (ray) ->
-        # TODO: Ignore traceabes which are behind the light source..
-        _.any @traceables, (each) -> (each.testIntersection ray)?
-        
+                
     determineHitColor: (closestHit) ->
         phongModel = new PhongModel(closestHit)
         _.each @lights, (light) =>
@@ -45,10 +41,15 @@ class Raytracer
         phongModel.getColor()
         
     calculateLighting: (light, phongModel) ->
+        # TODO: Find a way to avoid the duplicate calculation of 
+        # (lightPos - targetPos) - change Ray constructor
         lightRay = new Ray(phongModel.targetPosition, light.position)
-        inShadow = false
-        # TODO: Not used for now - has some strange artefacts
-        #inShadow = @hasIntersection lightRay
-        
-        unless inShadow
+        lightDistance = light.position.subtract(phongModel.targetPosition).length()
+
+        unless @checkIfInShadow lightRay, lightDistance
             phongModel.contributeLight lightRay.direction, light
+            
+    checkIfInShadow: (ray, lightDistance) ->
+        _.any @traceables, (each) -> 
+            test = each.testIntersection ray
+            test? and test.distance < lightDistance
