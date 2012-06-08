@@ -41,12 +41,10 @@ class Raytracer
         phongModel.getColor()
         
     calculateLighting: (light, phongModel) ->
-        # TODO: Find a way to avoid the duplicate calculation of 
-        # (lightPos - targetPos) - change Ray constructor
-        lightRay = new Ray(phongModel.targetPosition, light.position)
-        lightDistance = light.position.subtract(phongModel.targetPosition).length()
+        lightVector = light.position.subtract phongModel.targetPosition
+        lightRay = Ray.fromDirection(phongModel.targetPosition, lightVector)
 
-        unless @checkIfInShadow lightRay, lightDistance
+        unless @checkIfInShadow lightRay, lightVector.length()
             phongModel.contributeLight lightRay.direction, light
             
     checkIfInShadow: (ray, lightDistance) ->
