@@ -1,22 +1,29 @@
 #
 # Implements the Phong lighting model
 class Irradiance
-    constructor: (@material) ->
+    constructor: (intersection) ->
         @ambient = new Color(0.0)
         @diffuse = new Color(0.0)
         @specular = new Color(0.0)
+        @copyIntersectionParameters(intersection)
         # TODO: Provide global ambient color setting
         #@ambient = @material.ambient.multiplyFactor(...)
 
-        
-    contributeLight: (viewVector, lightVector, normal, lightSource) ->
-        diffuseComponent = @calcDiffuse lightVector, normal        
+    copyIntersectionParameters: (intersection) ->
+        @material = intersection.material()
+        @normal = intersection.normal()
+        @position = intersection.position
+        @viewVector = intersection.ray.direction.multiplyScalar -1.0
+
+    contributeLight: (lightVector, light) ->
+        diffuseComponent = @calcDiffuse lightVector
         if diffuseComponent > 0.0
-            @contributeDiffuse diffuseComponent, lightSource
+            radiance = light.radianceAt @position
+            @contributeDiffuse diffuseComponent, radiance
             
-            specularDot = @calcSpecular viewVector, lightVector, normal
+            specularDot = @calcSpecular lightVector
             if specularDot > 0.0
-                @contributeSpecular specularDot, lightSource
+                @contributeSpecular specularDot, radiance
                 
     toColor: ->
         ambientOut = @material.ambient.multiply @ambient
@@ -24,21 +31,21 @@ class Irradiance
         specularOut = @material.specular.multiply @specular
         ambientOut.add(diffuseOut).add(specularOut).toRgbColor()
     
-    contributeDiffuse: (value, lightSource) ->
-        @diffuse = @diffuse.add(lightSource.diffuse.multiplyFactor value)
+    contributeDiffuse: (value, radiance) ->
+        @diffuse = @diffuse.add(radiance.diffuse.multiplyFactor value)
         
-    contributeSpecular: (value, lightSource) ->
+    contributeSpecular: (value, radiance) ->
         specularComponent = Math.pow value, @material.specularity
-        addedSpecular = lightSource.specular.multiplyFactor specularComponent
+        addedSpecular = radiance.specular.multiplyFactor specularComponent
         @specular = @specular.add addedSpecular
         
-    calcDiffuse: (lightVector, normal) ->
-        lightVector.dotProduct normal
+    calcDiffuse: (lightVector) ->
+        lightVector.dotProduct @normal
         
-    calcSpecular: (viewVector, lightVector, normal) ->
-        lightReflectVector = @makeReflectVector normal, lightVector
-        lightReflectVector.dotProduct viewVector
+    calcSpecular: (lightVector) ->
+        lightReflectVector = @makeReflectVector lightVector
+        lightReflectVector.dotProduct @viewVector
         
-    makeReflectVector: (normal, vector) ->
-        nDot = normal.dotProduct vector
-        normal.multiplyScalar(2.0 * nDot).subtract(vector).normalize()
+    makeReflectVector: (vector) ->
+        nDot = @normal.dotProduct vector
+        @normal.multiplyScalar(2.0 * nDot).subtract(vector).normalize()

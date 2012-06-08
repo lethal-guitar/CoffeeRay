@@ -34,20 +34,21 @@ class Raytracer
             
         _.foldl @traceables, findFunc, null
         
+    hasIntersection: (ray) ->
+        # TODO: Ignore traceabes which are behind the light source..
+        _.any @traceables, (each) -> (each.testIntersection ray)?
+        
     determineHitColor: (closestHit) ->
-        irradiance = new Irradiance(closestHit.material())
-        @calculateLighting closestHit, irradiance 
+        irradiance = new Irradiance(closestHit)
+        _.each @lights, (light) =>
+            @calculateLighting light, irradiance
         irradiance.toColor()
         
-    calculateLighting: (closestHit, irradiance) ->
-        for light in @lights
-            do (light) =>
-                shadowTestRay = new Ray(closestHit.position, light.position)
-                inShadow = false
-                # TODO: Not used for now - has some strange artefacts
-                #inShadow = _.any(@traceables, (each) -> (each.testIntersection shadowTestRay)?)
-                
-                unless inShadow
-                    viewVector = closestHit.ray.direction.multiplyScalar(-1.0)
-                    lightVector = shadowTestRay.direction
-                    irradiance.contributeLight viewVector, lightVector, closestHit.normal(), light
+    calculateLighting: (light, irradiance) ->
+        lightRay = new Ray(irradiance.position, light.position)
+        inShadow = false
+        # TODO: Not used for now - has some strange artefacts
+        #inShadow = @hasIntersection lightRay
+        
+        unless inShadow
+            irradiance.contributeLight lightRay.direction, light

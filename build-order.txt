@@ -5,6 +5,8 @@ material.coffee
 ray.coffee
 irradiance.coffee
 intersection.coffee
+radiance.coffee
+lightsource.coffee
 pointlight.coffee
 raytraceable.coffee
 sphere.coffee
