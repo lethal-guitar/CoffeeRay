@@ -44,11 +44,11 @@ class Raytracer
             @calculateLighting light, phongModel
         phongModel.getColor()
         
-    calculateLighting: (light, irradiance) ->
-        lightRay = new Ray(irradiance.position, light.position)
+    calculateLighting: (light, phongModel) ->
+        lightRay = new Ray(phongModel.targetPosition, light.position)
         inShadow = false
         # TODO: Not used for now - has some strange artefacts
         #inShadow = @hasIntersection lightRay
         
         unless inShadow
-            irradiance.contributeLight lightRay.direction, light
+            phongModel.contributeLight lightRay.direction, light

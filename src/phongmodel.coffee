@@ -5,23 +5,26 @@
 # contributing light sources.
 class PhongModel
     constructor: (intersection) ->
+        @setupColorValues()
+        @copyIntersectionParameters intersection
+        # TODO: Provide global ambient color setting
+        #@ambient = @material.ambient.multiplyFactor(...)
+
+    setupColorValues: ->
         @ambient = new Color(0.0)
         @diffuse = new Color(0.0)
         @specular = new Color(0.0)
-        @copyIntersectionParameters(intersection)
-        # TODO: Provide global ambient color setting
-        #@ambient = @material.ambient.multiplyFactor(...)
 
     copyIntersectionParameters: (intersection) ->
         @material = intersection.material()
         @normal = intersection.normal()
-        @position = intersection.position
+        @targetPosition = intersection.position
         @viewVector = intersection.ray.direction.multiplyScalar -1.0
 
     contributeLight: (lightVector, light) ->
         diffuseComponent = @calcDiffuse lightVector
         if diffuseComponent > 0.0
-            radiance = light.radianceAt @position
+            radiance = light.radianceAt @targetPosition
             @contributeDiffuse diffuseComponent, radiance
             
             specularDot = @calcSpecular lightVector
