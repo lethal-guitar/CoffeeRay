@@ -10,6 +10,7 @@ lightsource.coffee
 pointlight.coffee
 raytraceable.coffee
 sphere.coffee
+plane.coffee
 viewport.coffee
 rendertarget.coffee
 raytracer.coffee

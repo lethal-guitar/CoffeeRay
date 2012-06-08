@@ -21,7 +21,4 @@ class Sphere extends Raytraceable
         t1 = -b - sqrtDiscriminant
         t = Math.min t0, t1
     
-        if t > 0.0
-            new Intersection(this, t, ray)
-        else
-            null
+        @clippedIntersection ray, t

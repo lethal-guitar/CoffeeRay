@@ -7,6 +7,12 @@ class Raytraceable
         
     material: ->
         abstractMethod()
+    
+    clippedIntersection: (ray, t) ->
+        if t > 0.0 
+            new Intersection(this, t, ray)
+        else
+            null
         
     # Convenience function, turns a single Color
     # value into a full-fledged Material, or passes

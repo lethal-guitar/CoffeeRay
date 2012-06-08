@@ -13,6 +13,8 @@ class CoffeeRay
         @tracer.addTraceable new Sphere(new Point3D(-20.0, 14.0, 30.0), 8.0, new Color(130, 200, 0))
         @tracer.addTraceable new Sphere(new Point3D(-10.0, 8.0, 38.0), 8.0, new Color(0, 200, 0))
         @tracer.addTraceable new Sphere(new Point3D(0.0, 2.0, 44.0), 8.0, new Color(80, 80, 210))
+        @tracer.addTraceable new Plane(new Point3D(0.0, 40.0, 0.0), new Point3D(0.0, -1.0, 0.0), new Color(160))
+        @tracer.addTraceable new Plane(new Point3D(-45.0, 0.0, 0.0), new Point3D(1.0, 0.0, 0.0), new Color(160))
         
         @tracer.addLightSource new PointLight(new Point3D(12.0, -34.0, 30.0)) 
         @tracer.addLightSource new PointLight(new Point3D(0.0, 34.0, 34))
