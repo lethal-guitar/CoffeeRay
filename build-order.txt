@@ -3,7 +3,7 @@ point3d.coffee
 color.coffee
 material.coffee
 ray.coffee
-irradiance.coffee
+phongmodel.coffee
 intersection.coffee
 radiance.coffee
 lightsource.coffee

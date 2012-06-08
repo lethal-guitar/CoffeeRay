@@ -39,10 +39,10 @@ class Raytracer
         _.any @traceables, (each) -> (each.testIntersection ray)?
         
     determineHitColor: (closestHit) ->
-        irradiance = new Irradiance(closestHit)
+        phongModel = new PhongModel(closestHit)
         _.each @lights, (light) =>
-            @calculateLighting light, irradiance
-        irradiance.toColor()
+            @calculateLighting light, phongModel
+        phongModel.getColor()
         
     calculateLighting: (light, irradiance) ->
         lightRay = new Ray(irradiance.position, light.position)

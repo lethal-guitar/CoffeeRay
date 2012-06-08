@@ -1,6 +1,9 @@
 #
 # Implements the Phong lighting model
-class Irradiance
+#
+# Cumulates a surface color value from several
+# contributing light sources.
+class PhongModel
     constructor: (intersection) ->
         @ambient = new Color(0.0)
         @diffuse = new Color(0.0)
@@ -25,7 +28,7 @@ class Irradiance
             if specularDot > 0.0
                 @contributeSpecular specularDot, radiance
                 
-    toColor: ->
+    getColor: ->
         ambientOut = @material.ambient.multiply @ambient
         diffuseOut = @material.diffuse.multiply @diffuse
         specularOut = @material.specular.multiply @specular
