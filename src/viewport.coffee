@@ -12,4 +12,4 @@ class Viewport
         tx = @xLeft + x * @dxPixel
         ty = @yTop + y * @dyPixel
         pointOnViewplane = new Point3D(tx, ty, 0.0)
-        new Ray(@pointOfView, pointOnViewplane)
+        Ray.fromPoints(@pointOfView, pointOnViewplane)

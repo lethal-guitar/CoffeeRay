@@ -42,10 +42,15 @@ class Raytracer
         
     calculateLighting: (light, phongModel) ->
         lightVector = light.position.subtract phongModel.targetPosition
-        lightRay = Ray.fromDirection(phongModel.targetPosition, lightVector)
+        lightDistance = lightVector.length()
+        
+        # This has the same effect as calling normalize, but we save
+        # one length calculation since the length is already known.
+        lightVector = lightVector.multiplyScalar(1.0 / lightDistance) 
+        lightRay = new Ray(phongModel.targetPosition, lightVector)
 
-        unless @checkIfInShadow lightRay, lightVector.length()
-            phongModel.contributeLight lightRay.direction, light
+        unless @checkIfInShadow lightRay, lightDistance
+            phongModel.contributeLight lightVector, light
             
     checkIfInShadow: (ray, lightDistance) ->
         _.any @traceables, (each) -> 

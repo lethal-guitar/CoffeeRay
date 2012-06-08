@@ -2,15 +2,11 @@ class Ray
     @makeDirectionVector: (from, to) ->
         to.subtract(from).normalize()
 
-    @fromDirection: (origin, direction) ->
-        ray = new Ray()
-        ray.origin = origin
-        ray.direction = direction.normalize()
-        ray
+    @fromPoints: (origin, target) ->
+        vector = Ray.makeDirectionVector origin, target
+        new Ray(origin, vector)
 
-    constructor: (@origin, target) ->        
-        if @origin?
-            @direction = Ray.makeDirectionVector @origin, target
+    constructor: (@origin, @direction) ->        
     
     positionAt: (t) ->
         vector = @direction.multiplyScalar(t)
