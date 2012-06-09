@@ -13,8 +13,13 @@ Also, HTML 5 provides a very convenient environment for displaying rendered imag
 Finally, I'd like to see how well modern JS engines can cope with such a computationally intensive task, and how much
 performance I can squeeze out of it ;)
 
-Generated images are blitted onto a 2D canvas. Currently it supports only spheres, phong shading and hard shadows. 
-No reflections/refractions (yet), no anti-aliasing, and no fancy stuff like depth-of-field etc.
+Generated images are blitted onto a 2D canvas. Currently supported: 
+* Sphere, plane and triangle primitives
+* Point lights
+* Phong shading
+* Hard shadows
+
+There are no reflections/refractions (yet), no anti-aliasing, and no fancy stuff like depth-of-field etc.
 
 Building
 --------
