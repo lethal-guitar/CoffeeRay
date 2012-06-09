@@ -11,6 +11,7 @@ pointlight.coffee
 raytraceable.coffee
 sphere.coffee
 plane.coffee
+triangle.coffee
 viewport.coffee
 rendertarget.coffee
 raytracer.coffee

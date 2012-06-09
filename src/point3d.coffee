@@ -14,7 +14,13 @@ class Point3D
         @add other.multiplyScalar(-1.0)
         
     dotProduct: (other) ->
-        @x * other.x + @y * other.y + @z * other.z
+        @x*other.x + @y*other.y + @z*other.z
+    
+    crossProduct: (other) ->
+        x = @y*other.z - @z*other.y
+        y = @z*other.x - @x*other.z
+        z = @x*other.y - @y*other.x
+        new Point3D(x, y, z)
         
     multiplyScalar: (scalar) ->
         new Point3D(@x * scalar, @y * scalar, @z * scalar)
